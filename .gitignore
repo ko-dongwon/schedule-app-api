@@ -35,3 +35,6 @@ out/
 
 ### VS Code ###
 .vscode/
+
+### Mysql password가 담긴 프로필
+src/main/resources/application-password.properties
