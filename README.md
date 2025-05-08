@@ -22,3 +22,4 @@ Java + JDBC 기반 3계층 구조의 간단한 일정 관리 API 입니다.
 | 일정 | 일정 생성       | POST   | /schedules                      |
 | 일정 | 일정 수정       | PATCH  | /schedules/{scheduleId}         |
 | 일정 | 일정 삭제       | DELETE | /schedules/{scheduleId}         |
+

@@ -10,8 +10,10 @@ CREATE TABLE schedules (
     schedule_id BIGINT AUTO_INCREMENT PRIMARY KEY ,
     content VARCHAR(200) NOT NULL ,
     password VARCHAR(20) NOT NULL ,
+    created_date TIMESTAMP NOT NULL ,
+    updated_date TIMESTAMP NOT NULL ,
     author_id BIGINT NOT NULL ,
-    CONSTRAINT fk_schdules_authors FOREIGN KEY (author_id) REFERENCES authors(author_id)
+    CONSTRAINT fk_schedules_authors FOREIGN KEY (author_id) REFERENCES authors(author_id)
 );
 
 
