@@ -19,7 +19,7 @@ public class AuthorRepositoryImpl implements AuthorRepository {
         PreparedStatement ps = null;
         ResultSet rs = null;
 
-        String sql = "INSERT INTO (author_name, email, created_at, updated_at) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO authors (author_name, email, created_at, updated_at) VALUES (?, ?, ?, ?)";
 
         try {
             conn = dataSource.getConnection();
