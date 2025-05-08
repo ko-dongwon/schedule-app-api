@@ -12,6 +12,11 @@ public class Author {
     private LocalDateTime updatedAt;
 
     private Author(String authorName, String email, LocalDateTime createdAt, LocalDateTime updatedAt) {
+        this(null, authorName, email, createdAt, updatedAt);
+    }
+
+    private Author(Long id, String authorName, String email, LocalDateTime createdAt, LocalDateTime updatedAt) {
+        this.id = id;
         this.authorName = authorName;
         this.email = email;
         this.createdAt = createdAt;
@@ -20,5 +25,9 @@ public class Author {
 
     public static Author createAuthor(String authorName, String email) {
         return new Author(authorName, email, LocalDateTime.now(), LocalDateTime.now());
+    }
+
+    public static Author createAuthor(Long id, String authorName, String email, LocalDateTime createdAt, LocalDateTime updatedAt) {
+        return new Author(id, authorName, email, createdAt, updatedAt);
     }
 }
