@@ -53,7 +53,36 @@ public class ScheduleRepositoryImpl implements ScheduleRepository{
 
     @Override
     public Optional<Schedule> findById(Long id) {
-        return Optional.empty();
+        Connection conn = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+
+        String sql = "SELECT schedule_id, password, content, created_at, updated_at, author_id FROM schedules WHERE schedule_id = ?";
+
+        try {
+            conn = dataSource.getConnection();
+            ps = conn.prepareStatement(sql);
+            ps.setLong(1, id);
+            rs = ps.executeQuery();
+
+            if (rs.next()) {
+                return Optional.of(Schedule.createSchedule(
+                        rs.getLong("schedule_id"),
+                        rs.getString("content"),
+                        rs.getString("password"),
+                        rs.getLong("author_id"),
+                        rs.getTimestamp("created_at").toLocalDateTime(),
+                        rs.getTimestamp("updated_at").toLocalDateTime()
+                ));
+            }
+
+            return Optional.empty();
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            close(conn, ps, rs);
+        }
     }
 
     @Override
