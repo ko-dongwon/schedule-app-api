@@ -16,7 +16,7 @@ public class ScheduleMapper {
         return dto;
     }
 
-    public static Schedule toSchedule(ScheduleCreateDto dto, Author author) {
-        return Schedule.createSchedule(dto.getContent(), dto.getPassword(), author.getId());
+    public static Schedule toSchedule(ScheduleCreateDto dto, Long authorId) {
+        return Schedule.createSchedule(dto.getContent(), dto.getPassword(), authorId);
     }
 }
