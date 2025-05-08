@@ -11,8 +11,8 @@ public class ScheduleMapper {
         dto.setId(schedule.getId());
         dto.setContent(schedule.getContent());
         dto.setAuthorName(author.getAuthorName());
-        dto.setCreatedDate(schedule.getCreatedDate());
-        dto.setUpdatedDate(schedule.getUpdatedDate());
+        dto.setCreatedAt(schedule.getCreatedAt());
+        dto.setUpdatedAt(schedule.getUpdatedAt());
         return dto;
     }
 

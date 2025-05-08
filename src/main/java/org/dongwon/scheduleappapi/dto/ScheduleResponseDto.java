@@ -10,6 +10,6 @@ public class ScheduleResponseDto {
     private Long id;
     private String content;
     private String authorName;
-    private LocalDateTime createdDate;
-    private LocalDateTime updatedDate;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 }
