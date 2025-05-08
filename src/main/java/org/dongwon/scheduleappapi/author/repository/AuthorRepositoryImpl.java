@@ -6,6 +6,7 @@ import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
 import java.sql.*;
+import java.util.Optional;
 
 @Repository
 @RequiredArgsConstructor
@@ -39,6 +40,39 @@ public class AuthorRepositoryImpl implements AuthorRepository {
             }
             return -1L;
 
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            close(conn, ps, rs);
+        }
+    }
+
+    @Override
+    public Optional<Author> findById(Long id) {
+        Connection conn = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+
+        String sql = "SELECT author_id, author_name, email, created_at, updated_at FROM authors WHERE author_id = ?";
+
+        try {
+            conn = dataSource.getConnection();
+            ps = conn.prepareStatement(sql);
+            ps.setLong(1, id);
+
+            rs = ps.executeQuery();
+
+            if (rs.next()) {
+                return Optional.of(Author.createAuthor(
+                        rs.getLong("author_id"),
+                        rs.getString("author_name"),
+                        rs.getString("email"),
+                        rs.getTimestamp("created_at").toLocalDateTime(),
+                        rs.getTimestamp("updated_at").toLocalDateTime()
+                ));
+            }
+
+            return Optional.empty();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         } finally {
