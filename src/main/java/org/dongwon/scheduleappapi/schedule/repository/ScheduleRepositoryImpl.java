@@ -90,7 +90,7 @@ public class ScheduleRepositoryImpl implements ScheduleRepository{
     }
 
     @Override
-    public List<Schedule> findAll(ScheduleSearch search) {
+    public List<Schedule> findAll(ScheduleSearch search, int offset, int size) {
         Connection conn = null;
         PreparedStatement ps = null;
         ResultSet rs = null;
@@ -113,7 +113,7 @@ public class ScheduleRepositoryImpl implements ScheduleRepository{
             }
 
             // 수정일 기준 내림차순
-            sql += " ORDER BY updated_at desc";
+            sql += " ORDER BY updated_at desc LIMIT ?, ?";
 
             conn = dataSource.getConnection();
             ps = conn.prepareStatement(sql);
@@ -127,6 +127,9 @@ public class ScheduleRepositoryImpl implements ScheduleRepository{
             if (Objects.nonNull(search.getUpdatedAt())) {
                 ps.setDate(index++, Date.valueOf(search.getUpdatedAt()));
             }
+            //offset, size 설정
+            ps.setInt(index++, offset);
+            ps.setInt(index++, size);
 
             rs = ps.executeQuery();
 
@@ -150,7 +153,55 @@ public class ScheduleRepositoryImpl implements ScheduleRepository{
             close(conn, ps, rs);
         }
     }
+    @Override
+    public long countSchedules(ScheduleSearch search) {
+        Connection conn = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        String sql = "SELECT COUNT(*) FROM schedules";
 
+        try{
+            // 동적 쿼리
+            boolean isFirst = true;
+            if (Objects.nonNull(search.getAuthorId())) {
+                if (isFirst) {
+                    isFirst = false;
+                    sql += " WHERE author_id = ?";
+                } else sql += " AND author_id = ?";
+            }
+
+            if (Objects.nonNull(search.getUpdatedAt())) {
+                if (isFirst) {
+                    isFirst = false;
+                    sql += " WHERE DATE(updated_at) = ?";
+                } else sql += " AND DATE(updated_at) = ?";
+            }
+
+            conn = dataSource.getConnection();
+            ps = conn.prepareStatement(sql);
+
+            // 파라미터 설정
+            int index = 1;
+            if (Objects.nonNull(search.getAuthorId())) {
+                ps.setLong(index++, search.getAuthorId());
+            }
+
+            if (Objects.nonNull(search.getUpdatedAt())) {
+                ps.setDate(index++, Date.valueOf(search.getUpdatedAt()));
+            }
+            rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getLong(1);
+            }
+
+            return 0L;
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            close(conn, ps, rs);
+        }
+    }
     @Override
     public void update(Schedule schedule) {
         Connection conn = null;

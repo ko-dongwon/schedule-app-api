@@ -1,5 +1,6 @@
 package org.dongwon.scheduleappapi.schedule.service;
 
+import org.dongwon.scheduleappapi.common.pagination.Page;
 import org.dongwon.scheduleappapi.dto.*;
 
 import java.util.List;
@@ -9,7 +10,7 @@ public interface ScheduleService {
 
     ScheduleResponseDto getSchedule(Long id);
 
-    List<ScheduleResponseDto> getSchedules(ScheduleSearch search);
+    Page<ScheduleResponseDto> getSchedules(ScheduleSearch search, int page, int size);
 
     void updateSchedule(Long id, ScheduleUpdateDto dto);
 

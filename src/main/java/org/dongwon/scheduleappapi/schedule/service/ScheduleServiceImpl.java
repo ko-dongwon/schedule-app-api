@@ -3,6 +3,7 @@ package org.dongwon.scheduleappapi.schedule.service;
 import lombok.RequiredArgsConstructor;
 import org.dongwon.scheduleappapi.author.repository.AuthorService;
 import org.dongwon.scheduleappapi.common.exception.PasswordMismatchException;
+import org.dongwon.scheduleappapi.common.pagination.Page;
 import org.dongwon.scheduleappapi.dto.*;
 import org.dongwon.scheduleappapi.entity.Author;
 import org.dongwon.scheduleappapi.entity.Schedule;
@@ -48,14 +49,16 @@ public class ScheduleServiceImpl implements  ScheduleService{
         return ScheduleMapper.toDto(schedule, author);
     }
 
-    public List<ScheduleResponseDto> getSchedules(ScheduleSearch search) {
-        List<Schedule> list = scheduleRepository.findAll(search);
+    public Page<ScheduleResponseDto> getSchedules(ScheduleSearch search, int page, int size) {
+        int offset = (page-1) * size;
+        List<Schedule> list = scheduleRepository.findAll(search, offset, size);
+        long totalCount = scheduleRepository.countSchedules(search);
         List<ScheduleResponseDto> dtos = new ArrayList<>();
         for (Schedule schedule : list) {
             Author author = authorService.getAuthor(schedule.getAuthorId());
             dtos.add(ScheduleMapper.toDto(schedule, author));
         }
-        return dtos;
+        return Page.of(dtos,page,size,totalCount);
     }
 
     @Transactional

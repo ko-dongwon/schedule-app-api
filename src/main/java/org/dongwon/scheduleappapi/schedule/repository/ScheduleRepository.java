@@ -11,7 +11,9 @@ public interface ScheduleRepository {
 
     Optional<Schedule> findById(Long id);
 
-    List<Schedule> findAll(ScheduleSearch search);
+    List<Schedule> findAll(ScheduleSearch search, int offset, int size);
+
+    long countSchedules(ScheduleSearch search);
 
     void update(Schedule schedule);
 
