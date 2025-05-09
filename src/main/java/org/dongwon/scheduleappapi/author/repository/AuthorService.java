@@ -18,7 +18,6 @@ public class AuthorService {
 
     @Transactional
     public Long createAuthor(AuthorRequestDto dto) {
-        if(Objects.isNull(dto)) throw new IllegalArgumentException("DTO는 null일 수 없습니다.");
         Author author = AuthorMapper.toAuthor(dto);
         return authorRepository.save(author);
     }

@@ -28,8 +28,6 @@ public class ScheduleServiceImpl implements  ScheduleService{
     // author와 schedule의 저장을 하나의 트랜잭션으로 묶음
     @Transactional
     public Long createSchedule(ScheduleCreateDto dto) {
-        if(Objects.isNull(dto)) throw new IllegalArgumentException("DTO는 null일 수 없습니다.");
-
         // author 엔티티 저장
         Long authorId = authorService.createAuthor(dto.getAuthor());
         // 비밀번호 암호화

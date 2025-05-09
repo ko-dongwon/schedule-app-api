@@ -36,7 +36,7 @@ public class ScheduleController {
     @GetMapping
     public ResponseEntity<Page<ScheduleResponseDto>> getSchedules(ScheduleSearch search,
                                                                   @RequestParam(defaultValue = "1") @Min(1) int page,
-                                                                  @RequestParam(defaultValue = "10") int size) {
+                                                                  @RequestParam(defaultValue = "10") @Min(1) int size) {
         Page<ScheduleResponseDto> returnPage = scheduleService.getSchedules(search, page, size);
         return ResponseEntity.status(HttpStatus.OK).body(returnPage);
     }
