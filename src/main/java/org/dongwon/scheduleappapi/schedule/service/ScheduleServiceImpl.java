@@ -11,6 +11,7 @@ import org.dongwon.scheduleappapi.entity.Author;
 import org.dongwon.scheduleappapi.entity.Schedule;
 import org.dongwon.scheduleappapi.mapper.ScheduleMapper;
 import org.dongwon.scheduleappapi.schedule.repository.ScheduleRepository;
+import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -33,7 +34,9 @@ public class ScheduleServiceImpl implements  ScheduleService{
 
         // author 엔티티 저장
         Long authorId = authorService.createAuthor(dto.getAuthor());
-
+        // 비밀번호 암호화
+        String hashedPassword = BCrypt.hashpw(dto.getPassword(), BCrypt.gensalt());
+        dto.setPassword(hashedPassword);
         // schedule 객체 생성
         Schedule schedule = ScheduleMapper.toSchedule(dto, authorId);
         // 저장 후 식별자 반환
@@ -62,7 +65,7 @@ public class ScheduleServiceImpl implements  ScheduleService{
     public void updateSchedule(Long id, ScheduleUpdateDto dto) {
         Schedule schedule = scheduleRepository.findById(id).orElseThrow(() -> new NoSuchElementException("Schedule(id:" + id + ")가 존재하지 않습니다."));
 
-        if(!checkPassword(dto.getPassword(), schedule.getPassword())) throw new PasswordMismatchException("비밀번호가 올바르지 않습니다.");
+        checkPassword(dto.getPassword(), schedule.getPassword());
 
         // 일정 할일 수정
         if (Objects.nonNull(dto.getContent())) {
@@ -78,7 +81,7 @@ public class ScheduleServiceImpl implements  ScheduleService{
         }
     }
 
-    private boolean checkPassword(String inputPassword, String storedPassword) {
-        return storedPassword.equals(inputPassword);
+    private void checkPassword(String inputPassword, String storedPassword) {
+        if (!BCrypt.checkpw(inputPassword, storedPassword)) throw new PasswordMismatchException("비밀번호가 올바르지 않습니다.");
     }
 }

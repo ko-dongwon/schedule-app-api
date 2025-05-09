@@ -9,7 +9,7 @@ CREATE TABLE authors(
 CREATE TABLE schedules (
     schedule_id BIGINT AUTO_INCREMENT PRIMARY KEY ,
     content VARCHAR(200) NOT NULL ,
-    password VARCHAR(20) NOT NULL ,
+    password VARCHAR(255) NOT NULL ,
     created_at TIMESTAMP NOT NULL ,
     updated_at TIMESTAMP NOT NULL ,
     author_id BIGINT NOT NULL ,
