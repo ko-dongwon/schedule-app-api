@@ -12,7 +12,6 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
-import java.util.List;
 
 @Validated
 @RestController
@@ -43,14 +42,14 @@ public class ScheduleController {
 
     @PatchMapping("/{scheduleId}")
     public ResponseEntity<Void> updateSchedule(@PathVariable Long scheduleId,
-                                               @RequestBody ScheduleUpdateDto dto) {
+                                               @Valid @RequestBody ScheduleUpdateDto dto) {
         scheduleService.updateSchedule(scheduleId, dto);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
     @DeleteMapping("/{scheduleId}")
     public ResponseEntity<Void> removeSchedule(@PathVariable Long scheduleId,
-                                               @RequestBody PasswordRequest password) {
+                                               @Valid @RequestBody PasswordRequest password) {
         scheduleService.removeSchedule(scheduleId, password.getPassword());
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
