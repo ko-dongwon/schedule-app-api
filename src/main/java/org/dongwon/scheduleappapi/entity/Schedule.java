@@ -38,4 +38,9 @@ public class Schedule {
     public static Schedule createSchedule(Long id, String content, String password, Long authorId, LocalDateTime createdAt, LocalDateTime updatedAt) {
         return new Schedule(id, content, password, createdAt, updatedAt, authorId);
     }
+
+    public void updateContent(String content) {
+        this.content = content;
+        this.updatedAt = LocalDateTime.now();
+    }
 }

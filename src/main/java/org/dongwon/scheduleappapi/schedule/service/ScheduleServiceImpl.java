@@ -2,9 +2,11 @@ package org.dongwon.scheduleappapi.schedule.service;
 
 import lombok.RequiredArgsConstructor;
 import org.dongwon.scheduleappapi.author.repository.AuthorService;
+import org.dongwon.scheduleappapi.common.exception.PasswordMismatchException;
 import org.dongwon.scheduleappapi.dto.ScheduleCreateDto;
 import org.dongwon.scheduleappapi.dto.ScheduleResponseDto;
 import org.dongwon.scheduleappapi.dto.ScheduleSearch;
+import org.dongwon.scheduleappapi.dto.ScheduleUpdateDto;
 import org.dongwon.scheduleappapi.entity.Author;
 import org.dongwon.scheduleappapi.entity.Schedule;
 import org.dongwon.scheduleappapi.mapper.ScheduleMapper;
@@ -54,5 +56,29 @@ public class ScheduleServiceImpl implements  ScheduleService{
             dtos.add(ScheduleMapper.toDto(schedule, author));
         }
         return dtos;
+    }
+
+    @Transactional
+    public void updateSchedule(Long id, ScheduleUpdateDto dto) {
+        Schedule schedule = scheduleRepository.findById(id).orElseThrow(() -> new NoSuchElementException("Schedule(id:" + id + ")가 존재하지 않습니다."));
+
+        if(!checkPassword(dto.getPassword(), schedule.getPassword())) throw new PasswordMismatchException("비밀번호가 올바르지 않습니다.");
+
+        // 일정 할일 수정
+        if (Objects.nonNull(dto.getContent())) {
+            schedule.updateContent(dto.getContent());
+            scheduleRepository.update(schedule);
+        }
+
+        // 작성자 수정
+        if (Objects.nonNull(dto.getAuthorName())) {
+            Author author = authorService.getAuthor(schedule.getId());
+            author.updateName(dto.getAuthorName());
+            authorService.updateAuthorName(schedule.getAuthorId(), dto.getAuthorName());
+        }
+    }
+
+    private boolean checkPassword(String inputPassword, String storedPassword) {
+        return storedPassword.equals(inputPassword);
     }
 }

@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.dongwon.scheduleappapi.dto.ScheduleCreateDto;
 import org.dongwon.scheduleappapi.dto.ScheduleResponseDto;
 import org.dongwon.scheduleappapi.dto.ScheduleSearch;
+import org.dongwon.scheduleappapi.dto.ScheduleUpdateDto;
 import org.dongwon.scheduleappapi.schedule.service.ScheduleService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -34,5 +35,11 @@ public class ScheduleController {
     public ResponseEntity<List<ScheduleResponseDto>> getSchedules(ScheduleSearch search) {
         List<ScheduleResponseDto> dtos = scheduleService.getSchedules(search);
         return ResponseEntity.status(HttpStatus.OK).body(dtos);
+    }
+    @PatchMapping("/{scheduleId}")
+    public ResponseEntity<Void> updateSchedule(@PathVariable Long scheduleId,
+                                               @RequestBody ScheduleUpdateDto dto) {
+        scheduleService.updateSchedule(scheduleId, dto);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 }

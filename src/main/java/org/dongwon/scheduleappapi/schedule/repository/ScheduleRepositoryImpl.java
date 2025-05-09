@@ -153,7 +153,26 @@ public class ScheduleRepositoryImpl implements ScheduleRepository{
 
     @Override
     public void update(Schedule schedule) {
+        Connection conn = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
 
+        String sql = "UPDATE schedules SET content = ?, updated_at = ? WHERE schedule_id = ?";
+        try{
+            conn = dataSource.getConnection();
+            ps = conn.prepareStatement(sql);
+
+            int index = 1;
+            ps.setString(index++, schedule.getContent());
+            ps.setTimestamp(index++, Timestamp.valueOf(schedule.getUpdatedAt()));
+            ps.setLong(index++, schedule.getId());
+            ps.executeUpdate();
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            close(conn, ps, rs);
+        }
     }
 
     @Override
