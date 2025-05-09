@@ -3,10 +3,7 @@ package org.dongwon.scheduleappapi.schedule.service;
 import lombok.RequiredArgsConstructor;
 import org.dongwon.scheduleappapi.author.repository.AuthorService;
 import org.dongwon.scheduleappapi.common.exception.PasswordMismatchException;
-import org.dongwon.scheduleappapi.dto.ScheduleCreateDto;
-import org.dongwon.scheduleappapi.dto.ScheduleResponseDto;
-import org.dongwon.scheduleappapi.dto.ScheduleSearch;
-import org.dongwon.scheduleappapi.dto.ScheduleUpdateDto;
+import org.dongwon.scheduleappapi.dto.*;
 import org.dongwon.scheduleappapi.entity.Author;
 import org.dongwon.scheduleappapi.entity.Schedule;
 import org.dongwon.scheduleappapi.mapper.ScheduleMapper;
@@ -79,6 +76,16 @@ public class ScheduleServiceImpl implements  ScheduleService{
             author.updateName(dto.getAuthorName());
             authorService.updateAuthorName(schedule.getAuthorId(), dto.getAuthorName());
         }
+    }
+    @Transactional
+    public void removeSchedule(Long id, String password) {
+        Schedule schedule = scheduleRepository.findById(id).orElseThrow(() -> new NoSuchElementException("Schedule(id:" + id + ")가 존재하지 않습니다."));
+
+        //패스워드 비교
+        checkPassword(password, schedule.getPassword());
+
+        scheduleRepository.deleteById(schedule.getId());
+        authorService.removeAuthor(schedule.getAuthorId());
     }
 
     private void checkPassword(String inputPassword, String storedPassword) {
