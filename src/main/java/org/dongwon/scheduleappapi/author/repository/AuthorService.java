@@ -26,4 +26,11 @@ public class AuthorService {
     public Author getAuthor(Long id) {
         return authorRepository.findById(id).orElseThrow(() -> new NoSuchElementException("Author(id:" + id + ")가 존재하지 않습니다."));
     }
+
+    @Transactional
+    public void updateAuthorName(Long id, String authorName) {
+        Author author = authorRepository.findById(id).orElseThrow(() -> new NoSuchElementException("Author(id:" + id + ")가 존재하지 않습니다."));
+        author.updateName(authorName);
+        authorRepository.update(author);
+    }
 }

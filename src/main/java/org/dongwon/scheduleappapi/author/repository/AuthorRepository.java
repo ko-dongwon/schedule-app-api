@@ -8,4 +8,6 @@ public interface AuthorRepository {
     Long save(Author author);
 
     Optional<Author> findById(Long id);
+
+    void update(Author author);
 }

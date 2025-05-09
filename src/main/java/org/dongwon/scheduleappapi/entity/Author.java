@@ -30,4 +30,9 @@ public class Author {
     public static Author createAuthor(Long id, String authorName, String email, LocalDateTime createdAt, LocalDateTime updatedAt) {
         return new Author(id, authorName, email, createdAt, updatedAt);
     }
+
+    public void updateName(String authorName) {
+        this.authorName = authorName;
+        this.updatedAt = LocalDateTime.now();
+    }
 }

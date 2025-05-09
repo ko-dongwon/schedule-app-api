@@ -79,6 +79,33 @@ public class AuthorRepositoryImpl implements AuthorRepository {
             close(conn, ps, rs);
         }
     }
+    @Override
+    public void update(Author author) {
+        Connection conn = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+
+        String sql = "UPDATE authors SET author_name = ?, updated_at = ? WHERE author_id = ?";
+
+        try {
+            conn = dataSource.getConnection();
+            ps = conn.prepareStatement(sql);
+
+            int index = 1;
+            ps.setString(index++, author.getAuthorName());
+            ps.setTimestamp(index++, Timestamp.valueOf(author.getUpdatedAt()));
+            ps.setLong(index++, author.getId());
+
+            ps.executeUpdate();
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            close(conn, ps, rs);
+        }
+
+
+    }
 
     private void close(Connection conn, PreparedStatement ps, ResultSet rs) {
         try {
