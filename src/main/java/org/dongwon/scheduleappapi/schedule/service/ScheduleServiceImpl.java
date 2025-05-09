@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.dongwon.scheduleappapi.author.repository.AuthorService;
 import org.dongwon.scheduleappapi.dto.ScheduleCreateDto;
 import org.dongwon.scheduleappapi.dto.ScheduleResponseDto;
+import org.dongwon.scheduleappapi.dto.ScheduleSearch;
 import org.dongwon.scheduleappapi.entity.Author;
 import org.dongwon.scheduleappapi.entity.Schedule;
 import org.dongwon.scheduleappapi.mapper.ScheduleMapper;
@@ -11,6 +12,8 @@ import org.dongwon.scheduleappapi.schedule.repository.ScheduleRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Objects;
 
@@ -41,5 +44,15 @@ public class ScheduleServiceImpl implements  ScheduleService{
         Author author = authorService.getAuthor(schedule.getAuthorId());
 
         return ScheduleMapper.toDto(schedule, author);
+    }
+
+    public List<ScheduleResponseDto> getSchedules(ScheduleSearch search) {
+        List<Schedule> list = scheduleRepository.findAll(search);
+        List<ScheduleResponseDto> dtos = new ArrayList<>();
+        for (Schedule schedule : list) {
+            Author author = authorService.getAuthor(schedule.getAuthorId());
+            dtos.add(ScheduleMapper.toDto(schedule, author));
+        }
+        return dtos;
     }
 }
