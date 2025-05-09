@@ -8,6 +8,7 @@ import java.time.LocalDateTime;
 @Data
 public class ScheduleResponseDto {
     private Long id;
+    private Long authorId;
     private String content;
     private String authorName;
     private LocalDateTime createdAt;

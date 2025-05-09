@@ -9,6 +9,7 @@ public class ScheduleMapper {
     public static ScheduleResponseDto toDto(Schedule schedule, Author author) {
         ScheduleResponseDto dto = new ScheduleResponseDto();
         dto.setId(schedule.getId());
+        dto.setAuthorId(schedule.getAuthorId());
         dto.setContent(schedule.getContent());
         dto.setAuthorName(author.getAuthorName());
         dto.setCreatedAt(schedule.getCreatedAt());
