@@ -10,4 +10,6 @@ public interface AuthorRepository {
     Optional<Author> findById(Long id);
 
     void update(Author author);
+
+    void deleteById(Long id);
 }

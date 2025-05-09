@@ -83,7 +83,6 @@ public class AuthorRepositoryImpl implements AuthorRepository {
     public void update(Author author) {
         Connection conn = null;
         PreparedStatement ps = null;
-        ResultSet rs = null;
 
         String sql = "UPDATE authors SET author_name = ?, updated_at = ? WHERE author_id = ?";
 
@@ -101,10 +100,30 @@ public class AuthorRepositoryImpl implements AuthorRepository {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         } finally {
-            close(conn, ps, rs);
+            close(conn, ps, null);
         }
 
 
+    }
+
+    public void deleteById(Long id) {
+        Connection conn = null;
+        PreparedStatement ps = null;
+
+        String sql = "DELETE FROM authors WHERE author_id = ?";
+        try {
+            conn = dataSource.getConnection();
+            ps = conn.prepareStatement(sql);
+
+            int index = 1;
+            ps.setLong(index++, id);
+
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            close(conn, ps, null);
+        }
     }
 
     private void close(Connection conn, PreparedStatement ps, ResultSet rs) {

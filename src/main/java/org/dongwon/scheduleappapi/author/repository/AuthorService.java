@@ -33,4 +33,10 @@ public class AuthorService {
         author.updateName(authorName);
         authorRepository.update(author);
     }
+
+    @Transactional
+    public void removeAuthor(Long id) {
+        Author author = authorRepository.findById(id).orElseThrow(() -> new NoSuchElementException("Author(id:" + id + ")가 존재하지 않습니다."));
+        authorRepository.deleteById(author.getId());
+    }
 }
