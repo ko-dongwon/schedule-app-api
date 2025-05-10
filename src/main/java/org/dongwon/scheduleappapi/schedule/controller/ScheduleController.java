@@ -1,5 +1,6 @@
 package org.dongwon.scheduleappapi.schedule.controller;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
@@ -12,7 +13,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
-
+@Tag(name = "Schedule Controller", description = "일정에 대한 CRUD를 담당합니다.")
 @Validated
 @RestController
 @RequiredArgsConstructor
