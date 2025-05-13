@@ -73,7 +73,7 @@ public class ScheduleServiceImpl implements  ScheduleService{
 
         // 작성자 수정
         if (Objects.nonNull(dto.getAuthorName())) {
-            Author author = authorService.getAuthor(schedule.getId());
+            Author author = authorService.getAuthor(schedule.getAuthorId());
             author.updateName(dto.getAuthorName());
             authorService.updateAuthorName(schedule.getAuthorId(), dto.getAuthorName());
         }
